@@ -2,7 +2,7 @@ Overview.
 ~~~~~~~~~
 
 cl-secure-random provides a cryptographically secure pseudo-random 
-number generator (CSPRNG) for Common-Lisp.
+number generator (CSPRNG) for Common Lisp.
 
 Example: (SECURE-RANDOM:NUMBER 10) => 9
 
