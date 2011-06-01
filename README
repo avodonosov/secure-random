@@ -1,0 +1,60 @@
+Overview.
+~~~~~~~~~
+
+cl-secure-random provides a cryptographically secure pseudo-random 
+number generator (CSPRNG) for Common-Lisp.
+
+Example: (SECURE-RANDOM:NUMBER 10) => 9
+
+We define an abstract interface for CSPRNG and provide a default 
+implementation of that interface.
+
+The library API.
+~~~~~~~~~~~~~~~~
+
+Class SECURE-RANDOM:STATE. 
+      The base class for all the possible implementations 
+      of a secure random number generator state.
+
+Special variable SECURE-RANDOM:*STATE*.
+      Current value of the random number generator state. Used as 
+      the default value for the library functions parameter STATE.
+
+Generic function BYTES (COUNT STATE) => random bytes.
+      The only generic function which needs to be implemented 
+      by a subclass of SECURE-RANDOM:STATE. Generates COUNT 
+      cryptographically strong pseudo-random bytes using the random 
+      number generator STATE. Returns the bytes as a SIMPLE-ARRAY 
+      with ELEMENT-TYPE '(UNSIGNED-BYTE 8). Signals an ERROR in case 
+      of problems (for example when the random number has not been 
+      initialized with enough entrophy).
+
+Function NUMBER (LIMIT &optional (STATE *STATE*)) => random number.
+      Returns a cryptographically strong pseudo-random number that 
+      is a non-negative number less than LIMIT and of the same 
+      type as LIMIT (in the current implementation, only INTEGER 
+      type is supporeted). LIMIT is a positive number. STATE is an 
+      instance of a subclass of the SECURE-RANDOM:STATE. Signals 
+      an ERROR in case of problems (for example when the random 
+      number generator has not been initialized with enough entrophy).
+
+Implementation notes.
+~~~~~~~~~~~~~~~~~~~~~
+
+The default implementation uses OpenSSL random number generator (via cl+ssl
+library). We started from the OpenSSL usage because it's the simplest way.
+
+Implementation of a pure Common Lisp CSPRNG is desirable, but it would 
+require to write much more code. The problem is not in the CSPRNG algorithms 
+itself, which are relatively simple (just read for example the Wikipedia article, 
+and use Ironclad for the required building blocks). But the problem is in 
+initialization of CSPRNG. Any CSPRNG needs to be initialized by some unguessable 
+value. OpenSSL can gather the initial value from a platform specific service 
+(/dev/random on Unix'es where it present, Windows Crypto API, 
+Entropy Gathering Daemon, etc.). The pure Lisp CSPRNG library would need to 
+re-implement all this code for gathering a truly unguessable initial value.
+
+Contact.
+~~~~~~~~
+
+Send questions or comments to avodonosov@yandex.ru
