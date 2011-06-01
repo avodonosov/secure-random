@@ -26,8 +26,8 @@ Generic function BYTES (COUNT STATE) => random bytes.
       cryptographically strong pseudo-random bytes using the random 
       number generator STATE. Returns the bytes as a SIMPLE-ARRAY 
       with ELEMENT-TYPE '(UNSIGNED-BYTE 8). Signals an ERROR in case 
-      of problems (for example when the random number has not been 
-      initialized with enough entrophy).
+      of problems (for example when the random number generator 
+      has not been initialized with enough entrophy).
 
 Function NUMBER (LIMIT &optional (STATE *STATE*)) => random number.
       Returns a cryptographically strong pseudo-random number that 
