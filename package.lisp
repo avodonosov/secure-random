@@ -6,6 +6,6 @@
 
 (defpackage #:secure-random
   (:use #:cl)
-  (:export state *state* bytes number)
+  (:export #:state #:*state* #:bytes #:number)
   (:shadow #:number))
 
