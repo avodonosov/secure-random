@@ -8,33 +8,33 @@
 
 ;; ************* The libray public interface **************
 
-(defclass state () ()
+(defclass generator () ()
   (:documentation "The base class for all the possible implementations of 
-secure random number generator state."))
+secure random number generator."))
 
-(defvar *state*
-  "Current value of the random number generator state. Used as the 
-default value for the library functions parameter STATE.")
+(defvar *generator*
+  "Current value of the random number generator. Used as the 
+default value for the library functions parameter GENERATOR.")
 
-(defgeneric bytes (count state)
+(defgeneric bytes (count generator)
   (:documentation "The only generic function which needs to be implemented by a subclass
-of SECURE-RANDOM:STATE. Generates COUNT cryptographically strong pseudo-random 
-bytes using the random number generator STATE. Returns the bytes as a 
+of SECURE-RANDOM:GENERATOR. Generates COUNT cryptographically strong pseudo-random 
+bytes using the random number generator GENERATOR. Returns the bytes as a 
 SIMPLE-ARRAY with ELEMENT-TYPE '(UNSIGNED-BYTE 8). Signals
 an ERROR in case of problems (for example when the random number
 generator has not been initialized with enough entrophy)."))
 
-(defun number (limit &optional (state *state*))
+(defun number (limit &optional (generator *generator*))
   "Returns a cryptographically strong pseudo-random number that is a 
 non-negative number less than LIMIT and of the same type as LIMIT 
 (in the current implementation, only INTEGER type is supporeted).
-LIMIT is a positive number. STATE is an instance of a 
-subclass of the SECURE-RANDOM:STATE. Signals an ERROR in case 
+LIMIT is a positive number. GENERATOR is an instance of a 
+subclass of the SECURE-RANDOM:GENERATOR. Signals an ERROR in case 
 of problems (for example when the random number generator has not been 
 initialized with enough entrophy)."
   (let ((bytes-needed (1+ (truncate (/ (log limit 2)
                                        8)))))
-    (mod (octets-to-integer (bytes bytes-needed state))
+    (mod (octets-to-integer (bytes bytes-needed generator))
          limit)))
 
 ;; ***************** Utils *********************
@@ -48,12 +48,12 @@ initialized with enough entrophy)."
 
 ;; ********* The implementation of the public interface ********
 
-;; The STATE implementation which uses OpenSSL 
+;; The GENERATOR implementation which uses OpenSSL 
 ;; random number generator
-(defclass open-ssl-state (state) ())
+(defclass open-ssl-generator (generator) ())
 
-(defmethod bytes (count (state open-ssl-state))
+(defmethod bytes (count (generator open-ssl-generator))
   (cl+ssl:random-bytes count))
 
 ;; Use the OpenSSL RNG as the default implementation
-(setf *state* (make-instance 'open-ssl-state))
+(setf *generator* (make-instance 'open-ssl-generator))

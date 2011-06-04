@@ -12,31 +12,31 @@ implementation of that interface.
 The library API.
 ~~~~~~~~~~~~~~~~
 
-Class SECURE-RANDOM:STATE. 
+Class SECURE-RANDOM:GENERATOR. 
       The base class for all the possible implementations 
-      of a secure random number generator state.
+      of a secure random number generator.
 
-Special variable SECURE-RANDOM:*STATE*.
-      Current value of the random number generator state. Used as 
-      the default value for the library functions parameter STATE.
+Special variable SECURE-RANDOM:*GENERATOR*.
+      Current value of the random number generator. Used as 
+      the default value for the library functions parameter GENERATOR.
 
-Generic function BYTES (COUNT STATE) => random bytes.
+Generic function BYTES (COUNT GENERATOR) => random bytes.
       The only generic function which needs to be implemented 
-      by a subclass of SECURE-RANDOM:STATE. Generates COUNT 
+      by a subclass of SECURE-RANDOM:GENERATOR. Generates COUNT 
       cryptographically strong pseudo-random bytes using the random 
-      number generator STATE. Returns the bytes as a SIMPLE-ARRAY 
+      number generator GENERATOR. Returns the bytes as a SIMPLE-ARRAY 
       with ELEMENT-TYPE '(UNSIGNED-BYTE 8). Signals an ERROR in case 
       of problems (for example when the random number generator 
-      has not been initialized with enough entrophy).
+      failed to initialize itself with enough entrophy).
 
-Function NUMBER (LIMIT &optional (STATE *STATE*)) => random number.
+Function NUMBER (LIMIT &optional (GENERATOR *GENERATOR*)) => random number.
       Returns a cryptographically strong pseudo-random number that 
       is a non-negative number less than LIMIT and of the same 
       type as LIMIT (in the current implementation, only INTEGER 
-      type is supporeted). LIMIT is a positive number. STATE is an 
-      instance of a subclass of the SECURE-RANDOM:STATE. Signals 
+      type is supporeted). LIMIT is a positive number. GENERATOR is an 
+      instance of a subclass of the SECURE-RANDOM:GENERATOR. Signals 
       an ERROR in case of problems (for example when the random 
-      number generator has not been initialized with enough entrophy).
+      number generator failed to initialize itself with enough entrophy).
 
 Implementation notes.
 ~~~~~~~~~~~~~~~~~~~~~
