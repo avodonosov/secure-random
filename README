@@ -46,7 +46,7 @@ library). We started from the OpenSSL usage because it's the simplest way.
 
 Implementation of a pure Common Lisp CSPRNG is desirable, but it would 
 require to write much more code. The problem is not in the CSPRNG algorithms 
-itself, which are relatively simple (just read for example the Wikipedia article, 
+themself, which are relatively simple (just read for example the Wikipedia article, 
 and use Ironclad for the required building blocks). But the problem is in 
 initialization of CSPRNG. Any CSPRNG needs to be initialized by some unguessable 
 value. OpenSSL can gather the initial value from a platform specific service 
